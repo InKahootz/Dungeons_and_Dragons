@@ -22,6 +22,10 @@ namespace DnDServer
         public User User {
             get {
                 var connection = OperationContext.Current.GetCallbackChannel<IClient>();
+                //
+                //TODO Select from db
+                //
+                //
                 return _users.Where(u => u.Key == connection).ToArray()[0].Value;
             }
         }
@@ -43,7 +47,7 @@ namespace DnDServer
                 var connection = OperationContext.Current.GetCallbackChannel<IClient>();
                 var user = new User { UserName = userName, LogInTime = DateTime.Now };
 
-                // Remove duplicate users (in case of client crash/unsuccesful logout
+                // Remove duplicate users (in case of client crash/unsuccesful logout)
                 foreach (var _user in _users)
                     if (_user.Value.UserName == userName)
                         _users.Remove(_user.Key);
