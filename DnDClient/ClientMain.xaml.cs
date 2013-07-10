@@ -1,5 +1,6 @@
 ﻿using Interfaces;
 using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Input;
@@ -32,15 +33,53 @@ namespace DnDClient
             usersTimer.Start();
         }
 
-        public void InitializeServer(User u, DuplexChannelFactory<IService> c, IService s) {
-            user = u;
+        public void InitializeServer(DuplexChannelFactory<IService> c, IService s) {
             channelFactory = c;
             server = s;
+            user = server.User;
+            this.DataContext = user;
+            refreshPlayer();
         }
         #endregion
 
-        public void receiveMessage(String msg) {
-            chatListBox.Items.Add(user.UserName + ": " + msg);
+        public void refreshPlayer() {
+            //user = server.User;
+
+            //labelName.Content = user["login"];
+            //labelRace.Content = user["race"];
+            //labelGender.Content = user["gender"];
+
+            //labelClass.Content = user["class1"];
+            //labelLevel.Content = user["class1_lvl"];
+            //labelExp.Content = user["experience"];
+
+            //labelStrength.Content = user["strength"];
+            //labelStrengthModifier.Content = ((int.Parse(user["strengthModifier"]) > 0) ? "+" : "") + user["strengthModifier"];
+
+            //labelDexterity.Content = user["dexterity"];
+            //labelDexterityModifier.Content = ((int.Parse(user["dexterityModifier"]) > 0) ? "+" : "") + user["dexterityModifier"];
+
+            //labelBuild.Content = user["build"];
+            //labelBuildModifier.Content = ((int.Parse(user["buildModifier"]) > 0) ? "+" : "") + user["buildModifier"];
+
+            //labelIntellect.Content = user["intellect"];
+            //labelIntellectModifier.Content = ((int.Parse(user["intellectModifier"]) > 0) ? "+" : "") + user["intellectModifier"];
+
+            //labelPrudence.Content = user["prudence"];
+            //labelPrudenceModifier.Content = ((int.Parse(user["prudenceModifier"]) > 0) ? "+" : "") + user["prudenceModifier"];
+
+            //labelCharisma.Content = user["charisma"];
+            //labelCharismaModifier.Content = ((int.Parse(user["charismaModifier"]) > 0) ? "+" : "") + user["charismaModifier"];
+
+            //labelPerseverance.Content = (int.Parse(user["perseverance"]) + int.Parse(user["buildModifier"])).ToString();
+            //labelReflex.Content = (int.Parse(user["reflex"]) + int.Parse(user["dexterityModifier"])).ToString();
+            //labelWill.Content = (int.Parse(user["will"]) + int.Parse(user["prudenceModifier"])).ToString();
+
+            //textNotes.Text = user["notes"];
+        }
+
+        public void receiveMessage(String name, String msg) {
+            chatListBox.Items.Add(name + ": " + msg);
         }
 
         private void usersTimer_Tick(object sender, EventArgs e) {
@@ -50,10 +89,10 @@ namespace DnDClient
 
                 usersListBox.Items.Clear();
                 foreach (var user in server.LoggedInUsers)
-                    usersListBox.Items.Add(user.UserName);
+                    usersListBox.Items.Add(user.Name);                
 
-            } catch (Exception) {
-                throw new System.Exception();
+            } catch (Exception ee) {
+                throw ee;
             }
         }
 
@@ -67,8 +106,8 @@ namespace DnDClient
                 chatListBox.Items.Add("Ty: " + message);
                 chatTextBox.Text = "";
 
-            } catch (Exception) {
-                throw new System.Exception();
+            } catch (Exception ee) {
+                throw ee;
             }
         }
         private void chatTextBox_KeyDown(object sender, KeyEventArgs e) {
@@ -85,9 +124,17 @@ namespace DnDClient
                     channelFactory.Close();
                 }
 
-            } catch (Exception) { 
-                throw new System.Exception(); 
+            } catch (Exception ee) { 
+                throw ee; 
             }
+        }
+
+        private void buttonCube_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void buttonSaveNotes_Click(object sender, RoutedEventArgs e) {
+            //server.DB().Update("`users`", "`notes`='" + textNotes.Text + "'", "`id`='" + user["id"] + "'");
         }
         #endregion
 

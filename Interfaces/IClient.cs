@@ -10,7 +10,10 @@ namespace Interfaces
     public interface IClient
     {
         [OperationContract(IsOneWay = true)]
-        void ReceiveMessage(String message);
+        void ReceiveMessage(String name, String message);
+
+        [OperationContract(IsOneWay = true)]
+        void Refresh();
 
         [OperationContract(IsOneWay = true)]
         void Disconnect();

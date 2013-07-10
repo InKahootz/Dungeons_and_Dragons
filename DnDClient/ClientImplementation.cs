@@ -13,8 +13,12 @@ namespace DnDClient
             _mw = window;
         }
 
-        public void ReceiveMessage(String message) {
-            _mw.receiveMessage(message);
+        public void ReceiveMessage(String name, String message) {
+            _mw.receiveMessage(name, message);
+        }
+
+        public void Refresh() {
+            _mw.refreshPlayer();
         }
 
         public void Disconnect() {

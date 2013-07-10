@@ -6,7 +6,7 @@ using System.ServiceModel;
 
 namespace DnDServer
 {
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Single, InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults=true)]
     class ServerImplementation : IService
     {
         private Dictionary<IClient, User> _users = new Dictionary<IClient, User>();
@@ -22,11 +22,8 @@ namespace DnDServer
         public User User {
             get {
                 var connection = OperationContext.Current.GetCallbackChannel<IClient>();
-                //
-                //TODO Select from db
-                //
-                //
-                return _users.Where(u => u.Key == connection).ToArray()[0].Value;
+                var user = _users.Where(u => u.Key == connection).ToArray()[0].Value;
+                return user;
             }
         }
         public User[] LoggedInUsers {
@@ -45,18 +42,19 @@ namespace DnDServer
 
             if (dbUser.Count > 0) {
                 var connection = OperationContext.Current.GetCallbackChannel<IClient>();
-                var user = new User { UserName = userName, LogInTime = DateTime.Now };
+                var user = new User();
+                user.Initialize(dbUser[0], DateTime.Now);
 
                 // Remove duplicate users (in case of client crash/unsuccesful logout)
                 foreach (var _user in _users)
-                    if (_user.Value.UserName == userName)
+                    if (_user.Value.Name == userName)
                         _users.Remove(_user.Key);
 
                 // Add connection
                 _users[connection] = user;
 
                 // Succesful login
-                window.Message(user.UserName + " logged in.");
+                window.Message(user.Name + " logged in.");
                 return true;
 
             } else return false;
@@ -65,7 +63,7 @@ namespace DnDServer
             var connection = OperationContext.Current.GetCallbackChannel<IClient>();
             User user;
             if (_users.TryGetValue(connection, out user)) {
-                window.Message(user.UserName + " logged out.");
+                window.Message(user.Name + " logged out.");
                 _users.Remove(connection);
             }
         }
@@ -87,8 +85,8 @@ namespace DnDServer
                 if (otherConnection == connection)
                     continue;
                 try {
-                    otherConnection.ReceiveMessage(message);
-                } catch (Exception) { }
+                    otherConnection.ReceiveMessage(user.Name, message);
+                } catch (Exception e) { throw e; }
             }
         }
     }

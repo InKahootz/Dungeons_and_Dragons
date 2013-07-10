@@ -25,7 +25,7 @@ namespace DnDClient
                 server = channelFactory.CreateChannel();
 
                 if (server.Login(login, pass)) {
-                    _MainWindow.InitializeServer(server.User, channelFactory, server);
+                    _MainWindow.InitializeServer(channelFactory, server);
                     this.DialogResult = true;
                 } else {
                     statusLabel.Content = "Login lub hasło nie są poprawne!";

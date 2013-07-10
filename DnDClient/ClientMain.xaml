@@ -1,36 +1,91 @@
-﻿<Window x:Class="DnDClient.ClientMainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Dungeons &amp; Dragons" Height="431" Width="738" Closed="Window_Closed" Icon="icon.ico" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+        xmlns:Interfaces="clr-namespace:Interfaces;assembly=Interfaces" x:Class="DnDClient.ClientMainWindow"
+        Title="Dungeons &amp; Dragons" Height="521" Width="793" Closed="Window_Closed" Icon="icon.ico" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <MatrixTransform x:Key="NameTransform" Matrix="Identity"/>
     </Window.Resources>
+    <Window.DataContext>
+        <Interfaces:User/>
+    </Window.DataContext>
     <Grid>
-        <Button x:Name="submitButton" Content="Wyślij" Margin="0,0,10,10" Click="Button_Click" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Grid.Column="1"/>
-        <ListBox x:Name="usersListBox" HorizontalAlignment="Right" Margin="0,10,10,38" Width="121" Grid.Column="1"/>
-        <ListBox x:Name="chatListBox" Margin="0,10,136,38" HorizontalAlignment="Right" Width="241" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="chatTextBox" Margin="0,0,90,10" TextWrapping="Wrap" Height="23" VerticalAlignment="Bottom" KeyDown="chatTextBox_KeyDown" HorizontalAlignment="Right" Width="287" Grid.ColumnSpan="2"/>
-        <StackPanel Margin="10,10,442,0" Orientation="Horizontal" Height="43" VerticalAlignment="Top">
-            <Label Content="Drenthor" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" FontSize="28" FontFamily="Cambria" ToolTip="Imię"/>
-            <Label Content="Człowiek" HorizontalAlignment="Left" Margin="20,14,0,0" VerticalAlignment="Top" ToolTip="Rasa"/>
-            <Label Content="M" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top" ToolTip="Płeć [M|K]"/>
-        </StackPanel>
-        <StackPanel Margin="10,58,382,0" Orientation="Horizontal" Height="26" VerticalAlignment="Top">
-            <Label Content="Tropiciel" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Klasa"/>
-            <Label Content="Lvl 5" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        </StackPanel>
-        <TabControl Margin="10,89,382,10">
-            <TabItem Header="Atrybuty">
-                <Grid/>
-            </TabItem>
-            <TabItem Header="Umiejętności">
-                <Grid/>
-            </TabItem>
-            <TabItem Header="Wyposażenie">
-                <Grid/>
-            </TabItem>
-        </TabControl>
-        <Button Content="Kostka" Margin="0,10,382,0" VerticalAlignment="Top" Height="43" HorizontalAlignment="Right" Width="55"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="0,10,10,10" HorizontalAlignment="Right" Width="367">
+            <Button x:Name="submitButton" Content="Wyślij" Click="Button_Click" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75"/>
+            <ListBox x:Name="usersListBox" HorizontalAlignment="Right" Margin="0,0,0,28" Width="121"/>
+            <ListBox x:Name="chatListBox" Margin="0,0,126,28" HorizontalAlignment="Right" Width="241"/>
+            <TextBox x:Name="chatTextBox" Margin="0,0,80,0" TextWrapping="Wrap" Height="23" VerticalAlignment="Bottom" KeyDown="chatTextBox_KeyDown" HorizontalAlignment="Right" Width="287"/>
+        </Grid>
+        <Grid Margin="10,10,382,10">
+            <StackPanel Margin="0,0,60,0" Orientation="Horizontal" Height="43" VerticalAlignment="Top">
+                <Label x:Name="labelName" Content="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" FontSize="28" FontFamily="Cambria" ToolTip="Imię"/>
+                <Label x:Name="labelRace" Content="{Binding Race}" HorizontalAlignment="Left" Margin="20,14,0,0" VerticalAlignment="Top" ToolTip="Rasa"/>
+                <Label x:Name="labelGender" Content="{Binding Gender}" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top" ToolTip="Płeć [M|K]"/>
+            </StackPanel>
+            <StackPanel Margin="0,48,0,0" Orientation="Horizontal" Height="26" VerticalAlignment="Top">
+                <Label x:Name="labelClass" Content="Klasa" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Klasa"/>
+                <Label Content="Lvl" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14,0,0,0" ToolTip="Poziom klasy"/>
+                <Label x:Name="labelLevel" Content="0"/>
+                <Label Content="Exp" Margin="14,0,0,0" ToolTip="Doświadczenie"/>
+                <Button x:Name="labelExp" Content="0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+            </StackPanel>
+            <TabControl Margin="0,79,0,0">
+                <TabItem Header="Atrybuty">
+                    <ScrollViewer>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Siła" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,34,0,0"/>
+                            <Label Content="Zręczność" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,65,0,0"/>
+                            <Label Content="Charyzma" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,189,0,0"/>
+                            <Label Content="Roztropność" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,158,0,0"/>
+                            <Label Content="Intelekt" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,127,0,0"/>
+                            <Label Content="Budowa" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,96,0,0"/>
+                            <Button x:Name="labelStrength" Content="{Binding Attributes[Str]}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="104,37,0,0" Background="{x:Null}" BorderBrush="{x:Null}" />
+                            <Button x:Name="labelDexterity" Content="{Binding Attributes[Dex]}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="104,68,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="labelBuild" Content="{Binding Attributes[Build]}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="104,99,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="labelIntellect" Content="{Binding Attributes[Int]}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="104,130,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="labelPrudence" Content="{Binding Attributes[Prud]}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="104,161,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="labelCharisma" Content="{Binding Attributes[Char]}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="104,192,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+
+                            <Label Content="Rzuty Obronne" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,230,0,0" FontWeight="Bold" FontSize="14"/>
+                            <Label Content="Wartości Atrybutów" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+
+                            <Button x:Name="labelStrengthModifier" Content="{Binding Attributes[StrMod]}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Modyfikator" Margin="133,37,0,0" Background="{x:Null}" BorderBrush="{x:Null}" />
+                            <Button x:Name="labelDexterityModifier" Content="{Binding Attributes[DexMod]}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Modyfikator" Margin="133,68,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="labelBuildModifier" Content="{Binding Attributes[BuildMod]}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Modyfikator" Margin="133,99,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="labelIntellectModifier" Content="{Binding Attributes[IntMod]}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Modyfikator" Margin="133,130,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="labelPrudenceModifier" Content="{Binding Attributes[PrudMod]}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Modyfikator" Margin="133,161,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="labelCharismaModifier" Content="{Binding Attributes[CharMod]}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Modyfikator" Margin="133,192,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+
+                            <Label Content="Wytrwałość" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,264,0,0"/>
+                            <Button x:Name="labelPerseverance" Content="{Binding DefenseThrows[Per]}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="133,267,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                            <Label Content="Refleks" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,295,0,0"/>
+                            <Button x:Name="labelReflex" Content="{Binding DefenseThrows[Ref]}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="133,298,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                            <Label Content="Wola" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,326,0,0"/>
+                            <Button x:Name="labelWill" Content="{Binding DefenseThrows[Wil]}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="133,329,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Umiejętności">
+                    <Grid/>
+                </TabItem>
+                <TabItem Header="Wyposażenie">
+                    <Grid/>
+                </TabItem>
+                <TabItem Header="Notatki" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="55">
+                    <Grid>
+                        <TextBox x:Name="textNotes" TextWrapping="Wrap" Margin="0,0,0,25"/>
+                        <Button x:Name="buttonSaveNotes" Content="Zapisz" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="buttonSaveNotes_Click"/>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            <Button x:Name="buttonCube" Content="Kostka" VerticalAlignment="Top" Height="43" HorizontalAlignment="Right" Width="55" Click="buttonCube_Click"/>
+
+        </Grid>
 
     </Grid>
 </Window>
