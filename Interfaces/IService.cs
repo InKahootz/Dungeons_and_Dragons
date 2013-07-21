@@ -24,13 +24,13 @@ namespace Interfaces
         [OperationContract]
         Boolean Login(String userName, String userPass);
 
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void Logout();
 
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void Disconnect();
 
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void SendGlobalMessage(String message);
     }
 }

@@ -4,7 +4,7 @@ using System.ServiceModel;
 
 namespace DnDClient
 {
-    [ServiceBehavior(ConcurrencyMode=ConcurrencyMode.Single, InstanceContextMode = InstanceContextMode.Single, UseSynchronizationContext = false)]
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, InstanceContextMode = InstanceContextMode.PerSession, UseSynchronizationContext = false)]
     class ClientImplementation : IClient
     {
         private ClientMainWindow _mw;
@@ -13,8 +13,8 @@ namespace DnDClient
             _mw = window;
         }
 
-        public void ReceiveMessage(String name, String message) {
-            _mw.receiveMessage(name, message);
+        public void ReceiveMessage(String message) {
+            _mw.receiveMessage(message);
         }
 
         public void Refresh() {

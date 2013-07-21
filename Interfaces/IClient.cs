@@ -10,7 +10,7 @@ namespace Interfaces
     public interface IClient
     {
         [OperationContract(IsOneWay = true)]
-        void ReceiveMessage(String name, String message);
+        void ReceiveMessage(String message);
 
         [OperationContract(IsOneWay = true)]
         void Refresh();

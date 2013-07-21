@@ -78,8 +78,8 @@ namespace DnDClient
             //textNotes.Text = user["notes"];
         }
 
-        public void receiveMessage(String name, String msg) {
-            chatListBox.Items.Add(name + ": " + msg);
+        public void receiveMessage(String msg) {
+            chatListBox.Items.Add(msg);
         }
 
         private void usersTimer_Tick(object sender, EventArgs e) {
@@ -97,7 +97,8 @@ namespace DnDClient
         }
 
         #region Controls handling
-        private void Button_Click(object sender, RoutedEventArgs e) {
+
+        private void ChatSubmitButton_Click(object sender, RoutedEventArgs e) {
             String message = chatTextBox.Text;
             if (string.IsNullOrEmpty(message)) return;
 
@@ -113,7 +114,7 @@ namespace DnDClient
         private void chatTextBox_KeyDown(object sender, KeyEventArgs e) {
             if (e.Key != Key.Enter) return;
             e.Handled = true;
-            Button_Click(sender, e);
+            ChatSubmitButton_Click(sender, e);
         }
 
         private void Window_Closed(object sender, EventArgs e) {
@@ -129,14 +130,41 @@ namespace DnDClient
             }
         }
 
-        private void buttonCube_Click(object sender, RoutedEventArgs e) {
-
+        private void buttonCube_Click(object sender, RoutedEventArgs e) {            
+            var loginWindow = new CubeWindow(this);
+            loginWindow.Show();
         }
 
         private void buttonSaveNotes_Click(object sender, RoutedEventArgs e) {
             //server.DB().Update("`users`", "`notes`='" + textNotes.Text + "'", "`id`='" + user["id"] + "'");
         }
         #endregion
+
+        public void cubeThrow(List<Int32> throws) {
+            int sum = 0;
+            int count = throws.Count;
+            foreach (var _ in throws)
+                sum += _;
+
+            var message = user.Name + " wyrzucił " + sum;
+
+            if (count > 1) {
+                message += " (";
+
+                for (int i = 0; i < count; i++) 
+                    message += throws[i] + ((i == count - 1) ? "" : ",  ");
+
+                message += ")";
+            }
+
+            message += ".";
+
+            try {
+                server.SendGlobalMessage(message);
+                chatListBox.Items.Add(message);
+
+            } catch (Exception) { throw; }
+        }
 
         public void error(String message) {
             MessageBox.Show(message);

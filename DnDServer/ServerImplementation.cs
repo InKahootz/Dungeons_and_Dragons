@@ -85,7 +85,7 @@ namespace DnDServer
                 if (otherConnection == connection)
                     continue;
                 try {
-                    otherConnection.ReceiveMessage(user.Name, message);
+                    otherConnection.ReceiveMessage(user.Name + ": " + message);
                 } catch (Exception e) { throw e; }
             }
         }
