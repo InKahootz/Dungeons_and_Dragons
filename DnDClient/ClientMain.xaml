@@ -25,11 +25,11 @@
                 <Label x:Name="labelGender" Content="{Binding Gender}" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top" ToolTip="Płeć [M|K]"/>
             </StackPanel>
             <StackPanel Margin="0,48,0,0" Orientation="Horizontal" Height="26" VerticalAlignment="Top">
-                <Label x:Name="labelClass" Content="Klasa" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Klasa"/>
+                <Label x:Name="labelClass" Content="{Binding Class1}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Klasa"/>
                 <Label Content="Lvl" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14,0,0,0" ToolTip="Poziom klasy"/>
-                <Label x:Name="labelLevel" Content="0"/>
+                <Label x:Name="labelLevel" Content="{Binding Class1Lvl}"/>
                 <Label Content="Exp" Margin="14,0,0,0" ToolTip="Doświadczenie"/>
-                <Button x:Name="labelExp" Content="0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                <Button x:Name="labelExp" Content="{Binding Experience}" Background="{x:Null}" BorderBrush="{x:Null}"/>
             </StackPanel>
             <TabControl Margin="0,79,0,0">
                 <TabItem Header="Atrybuty">
@@ -54,7 +54,7 @@
                             <Label Content="Rzuty Obronne" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,230,0,0" FontWeight="Bold" FontSize="14"/>
                             <Label Content="Wartości Atrybutów" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
 
-                            <Button x:Name="labelStrengthModifier" Content="{Binding Attributes[StrMod]}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Modyfikator" Margin="133,37,0,0" Background="{x:Null}" BorderBrush="{x:Null}" />
+                            <Button x:Name="labelStrengthModifier" Content="{Binding Attributes[StrMod]}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Modyfikator" Margin="133,37,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
                             <Button x:Name="labelDexterityModifier" Content="{Binding Attributes[DexMod]}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Modyfikator" Margin="133,68,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
                             <Button x:Name="labelBuildModifier" Content="{Binding Attributes[BuildMod]}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Modyfikator" Margin="133,99,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
                             <Button x:Name="labelIntellectModifier" Content="{Binding Attributes[IntMod]}" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Modyfikator" Margin="133,130,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
@@ -78,7 +78,7 @@
                 </TabItem>
                 <TabItem Header="Notatki" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="55">
                     <Grid>
-                        <TextBox x:Name="textNotes" TextWrapping="Wrap" Margin="0,0,0,25"/>
+                        <TextBox x:Name="textNotes" TextWrapping="Wrap" Margin="0,0,0,25" Text="{Binding Notes}" AcceptsReturn="True"/>
                         <Button x:Name="buttonSaveNotes" Content="Zapisz" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="buttonSaveNotes_Click"/>
                     </Grid>
                 </TabItem>

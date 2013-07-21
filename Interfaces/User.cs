@@ -41,6 +41,13 @@ namespace Interfaces
             Perseverance = int.Parse(sql["perseverance"]);
             Reflex = int.Parse(sql["reflex"]);
             Will = int.Parse(sql["will"]);
+
+            DefenseThrows = new Dictionary<String, Int32>();
+            DefenseThrows.Add("Per", (Perseverance + Attributes["BuildMod"]));
+            DefenseThrows.Add("Ref", (Reflex + Attributes["DexMod"]));
+            DefenseThrows.Add("Wil", (Will + Attributes["PrudMod"]));
+
+            Notes = sql["notes"];
         }
 
         [DataMember]
@@ -86,15 +93,11 @@ namespace Interfaces
 
         [DataMember]
         public Dictionary<String, Int32> Attributes { get; set; }
-        //[DataMember]
-        //public Dictionary<String, Int32> DefenseThrows {
-        //    get {
-        //        var dict = new Dictionary<String, Int32>();
-        //        dict.Add("Per", (Perseverance + Attributes["BuildMod"]));
-        //        dict.Add("Ref", (Reflex + Attributes["DexMod"]));
-        //        dict.Add("Wil", (Will + Attributes["PrudMod"]));
-        //        return dict;
-        //    }
-        //}
+        [DataMember]
+        public Dictionary<String, Int32> DefenseThrows { get; set; }
+
+
+        [DataMember]
+        public String Notes { get; set; }
     }
 }

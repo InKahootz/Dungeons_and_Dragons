@@ -36,6 +36,14 @@ namespace DnDServer
             }
         }
 
+        public void Update(String TABLE, String SET, String WHERE) {
+            db.Update(TABLE, SET, WHERE);
+            var connection = OperationContext.Current.GetCallbackChannel<IClient>();
+            User user;
+            _users.TryGetValue(connection, out user);
+            window.Message(user.Name + " updated entry.");
+        }
+
         #region Login/Logout/Disconnect
         public Boolean Login(String userName, String userPass) {
             var dbUser = db.Select("`users`", "`login`='" + userName + "' AND `pass`='" + userPass + "'");

@@ -32,5 +32,8 @@ namespace Interfaces
 
         [OperationContract(IsOneWay = true)]
         void SendGlobalMessage(String message);
+
+        [OperationContract(IsOneWay = true)]
+        void Update(String t, String s, String w);
     }
 }

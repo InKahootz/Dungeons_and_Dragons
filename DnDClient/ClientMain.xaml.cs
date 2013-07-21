@@ -136,7 +136,7 @@ namespace DnDClient
         }
 
         private void buttonSaveNotes_Click(object sender, RoutedEventArgs e) {
-            //server.DB().Update("`users`", "`notes`='" + textNotes.Text + "'", "`id`='" + user["id"] + "'");
+            server.Update("`users`", "`notes`='" + textNotes.Text + "'", "`id`='" + user.Id + "'");
         }
         #endregion
 
