@@ -15,6 +15,7 @@ namespace DnDClient
         DispatcherTimer usersTimer;
         Boolean logged = false;
         User user;
+        Boolean isGM = false;
 
         #region Class Constructor and Initialization of service variables
         public ClientMainWindow() {
@@ -37,45 +38,24 @@ namespace DnDClient
             channelFactory = c;
             server = s;
             user = server.User;
+            isGM = user.isGM;
             this.DataContext = user;
-            refreshPlayer();
+
+            if (isGM) {
+                tabAtrybuty.Visibility = System.Windows.Visibility.Hidden;
+                tabUmiejetnosci.Visibility = System.Windows.Visibility.Hidden;
+                tabWyposazenie.Visibility = System.Windows.Visibility.Hidden;
+                tabControl.SelectedIndex = 3;
+                classPanel.Visibility = System.Windows.Visibility.Hidden;
+                labelRace.Visibility = System.Windows.Visibility.Hidden;
+                labelGender.Visibility = System.Windows.Visibility.Hidden;
+                
+            }
         }
         #endregion
 
         public void refreshPlayer() {
-            //user = server.User;
-
-            //labelName.Content = user["login"];
-            //labelRace.Content = user["race"];
-            //labelGender.Content = user["gender"];
-
-            //labelClass.Content = user["class1"];
-            //labelLevel.Content = user["class1_lvl"];
-            //labelExp.Content = user["experience"];
-
-            //labelStrength.Content = user["strength"];
-            //labelStrengthModifier.Content = ((int.Parse(user["strengthModifier"]) > 0) ? "+" : "") + user["strengthModifier"];
-
-            //labelDexterity.Content = user["dexterity"];
-            //labelDexterityModifier.Content = ((int.Parse(user["dexterityModifier"]) > 0) ? "+" : "") + user["dexterityModifier"];
-
-            //labelBuild.Content = user["build"];
-            //labelBuildModifier.Content = ((int.Parse(user["buildModifier"]) > 0) ? "+" : "") + user["buildModifier"];
-
-            //labelIntellect.Content = user["intellect"];
-            //labelIntellectModifier.Content = ((int.Parse(user["intellectModifier"]) > 0) ? "+" : "") + user["intellectModifier"];
-
-            //labelPrudence.Content = user["prudence"];
-            //labelPrudenceModifier.Content = ((int.Parse(user["prudenceModifier"]) > 0) ? "+" : "") + user["prudenceModifier"];
-
-            //labelCharisma.Content = user["charisma"];
-            //labelCharismaModifier.Content = ((int.Parse(user["charismaModifier"]) > 0) ? "+" : "") + user["charismaModifier"];
-
-            //labelPerseverance.Content = (int.Parse(user["perseverance"]) + int.Parse(user["buildModifier"])).ToString();
-            //labelReflex.Content = (int.Parse(user["reflex"]) + int.Parse(user["dexterityModifier"])).ToString();
-            //labelWill.Content = (int.Parse(user["will"]) + int.Parse(user["prudenceModifier"])).ToString();
-
-            //textNotes.Text = user["notes"];
+            user = server.User;
         }
 
         public void receiveMessage(String msg) {
@@ -103,8 +83,8 @@ namespace DnDClient
             if (string.IsNullOrEmpty(message)) return;
 
             try {
-                server.SendGlobalMessage(message);
-                chatListBox.Items.Add("Ty: " + message);
+                server.SendGlobalMessage(user.Name + ": " + message);
+                chatListBox.Items.Insert(0, "Ty: " + message);
                 chatTextBox.Text = "";
 
             } catch (Exception ee) {
@@ -151,6 +131,15 @@ namespace DnDClient
         public void error(String message) {
             MessageBox.Show(message);
             this.Close();
+        }
+
+        private void refreshButton_Click(object sender, RoutedEventArgs e) {
+            try {
+                server.RefreshPlayer(isGM);
+            } catch (Exception) {
+                
+                throw;
+            } 
         }
     }
 }

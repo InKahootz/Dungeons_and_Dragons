@@ -22,7 +22,8 @@ namespace DnDServer
         public User User {
             get {
                 var connection = OperationContext.Current.GetCallbackChannel<IClient>();
-                var user = _users.Where(u => u.Key == connection).ToArray()[0].Value;
+                User user;
+                _users.TryGetValue(connection, out user);
                 return user;
             }
         }
@@ -83,6 +84,18 @@ namespace DnDServer
         }
         #endregion
 
+        public void RefreshPlayer(Boolean isGM) {
+            var conn = OperationContext.Current.GetCallbackChannel<IClient>();
+            
+            foreach (var player in _users.Keys) {
+                //if (!isGM && player != conn) continue;
+
+                try {
+                    player.Refresh();
+                } catch (Exception e) { throw e; }
+            }
+        }
+
         public void SendGlobalMessage(String message) {
             var connection = OperationContext.Current.GetCallbackChannel<IClient>();
             User user;
@@ -93,7 +106,7 @@ namespace DnDServer
                 if (otherConnection == connection)
                     continue;
                 try {
-                    otherConnection.ReceiveMessage(user.Name + ": " + message);
+                    otherConnection.ReceiveMessage(message);
                 } catch (Exception e) { throw e; }
             }
         }

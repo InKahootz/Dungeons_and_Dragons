@@ -13,6 +13,8 @@ namespace Interfaces
         public void Initialize(Dictionary<String, String> sql, DateTime time) {
             LogInTime = time;
 
+            isGM = Convert.ToBoolean(sql["isGM"]);
+
             Id = int.Parse(sql["id"]);
             Name = sql["login"];
 
@@ -52,6 +54,9 @@ namespace Interfaces
 
         [DataMember]
         public DateTime LogInTime { get; set; }
+
+        [DataMember]
+        public Boolean isGM { get; set; }
 
         [DataMember]
         public Int32 Id { get; set; }

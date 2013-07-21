@@ -35,5 +35,8 @@ namespace Interfaces
 
         [OperationContract(IsOneWay = true)]
         void Update(String t, String s, String w);
+
+        [OperationContract(IsOneWay = true)]
+        void RefreshPlayer(Boolean isGM);
     }
 }
