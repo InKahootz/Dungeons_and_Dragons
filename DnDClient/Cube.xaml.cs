@@ -2,43 +2,63 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Windows;
+using Interfaces;
 
 namespace DnDClient
 {
     public partial class CubeWindow : Window
     {
         private ClientMainWindow _mw;
+        private User user;
         private static RNGCryptoServiceProvider rngCsp;
 
-        public CubeWindow(ClientMainWindow window) {
+        public CubeWindow(ClientMainWindow window, User user) {
             InitializeComponent();
             _mw = window;
+            this.user = user;
             modifierBox.Items.Add("Bez Modyfikatora");
             modifierBox.SelectedIndex = 0;
         }
 
         private void randomizeButton_Click(object sender, RoutedEventArgs e) {
-            var throwsNum = int.Parse(throws.Text);
-            var cubeTypeNum = int.Parse(cubeType.Text);
+            byte throwsNum;          // Ilość rzutów
+            byte cubeTypeNum;        // Ilość ścianek kostki
 
             try {
-                throwsNum = int.Parse(throws.Text);
-                cubeTypeNum = int.Parse(cubeType.Text);
+                throwsNum = byte.Parse(throws.Text);
+                cubeTypeNum = byte.Parse(cubeType.Text);
 
             } catch (Exception) { return; }
 
-            var list = new List<Int32>();
-
-            rngCsp = new RNGCryptoServiceProvider();
+            var list = new List<Int32>();               // Lista wyrzuconych oczek
+            rngCsp = new RNGCryptoServiceProvider();    // Service Kryptograficzny
 
             for (int i = 0; i < throwsNum; i++) {
-                byte roll = RollDice((byte)cubeTypeNum);
+                byte roll = RollDice((byte)cubeTypeNum);    // Funkcja losująca
                 list.Add(roll);
             }
 
             rngCsp.Dispose();
 
-            _mw.cubeThrow(list);
+
+            int sum = 0;
+            foreach (var _ in list)         // Suma wszystkich oczek
+                sum += _;
+
+            var message = user.Name + " wyrzucił [" + throwsNum + "k" + cubeTypeNum + "] " + sum;
+
+            if (throwsNum > 1) {
+                message += " (";
+
+                for (int i = 0; i < throwsNum; i++) // Wypisanie poszczególnych rzutów
+                    message += list[i] + ((i == throwsNum - 1) ? "" : ",  ");
+
+                message += ")";
+            }
+
+            message += ".";
+
+            _mw.cubeThrow(message);
         }
 
         #region Rzut Kostką

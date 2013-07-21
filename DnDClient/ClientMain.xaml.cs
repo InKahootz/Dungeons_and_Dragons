@@ -79,7 +79,7 @@ namespace DnDClient
         }
 
         public void receiveMessage(String msg) {
-            chatListBox.Items.Add(msg);
+            chatListBox.Items.Insert(0, msg);
         }
 
         private void usersTimer_Tick(object sender, EventArgs e) {
@@ -131,7 +131,7 @@ namespace DnDClient
         }
 
         private void buttonCube_Click(object sender, RoutedEventArgs e) {            
-            var loginWindow = new CubeWindow(this);
+            var loginWindow = new CubeWindow(this, user);
             loginWindow.Show();
         }
 
@@ -140,28 +140,10 @@ namespace DnDClient
         }
         #endregion
 
-        public void cubeThrow(List<Int32> throws) {
-            int sum = 0;
-            int count = throws.Count;
-            foreach (var _ in throws)
-                sum += _;
-
-            var message = user.Name + " wyrzucił " + sum;
-
-            if (count > 1) {
-                message += " (";
-
-                for (int i = 0; i < count; i++) 
-                    message += throws[i] + ((i == count - 1) ? "" : ",  ");
-
-                message += ")";
-            }
-
-            message += ".";
-
+        public void cubeThrow(String message) {
             try {
                 server.SendGlobalMessage(message);
-                chatListBox.Items.Add(message);
+                chatListBox.Items.Insert(0, message);
 
             } catch (Exception) { throw; }
         }
